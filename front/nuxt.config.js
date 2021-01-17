@@ -31,10 +31,22 @@ export default {
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
     transpile: [/^element-ui/],
+  },
+  proxy:{
+    '/api/':{
+      target: 'http://localhost:7001',
+      secure: false,
+      changeOrigin: true,
+      pathRewrite:{
+        '^/api': ''
+      }
+    }
   }
 }
