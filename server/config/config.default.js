@@ -23,6 +23,13 @@ module.exports = appInfo => {
     // myAppName: 'egg',
   };
 
+  //解决post请求csrf问题
+  config.security = {
+    csrf: {
+      enable: false
+    }
+  }
+
   return {
     ...config,
     ...userConfig,

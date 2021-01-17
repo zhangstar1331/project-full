@@ -1,6 +1,7 @@
 const {Controller} = require('egg')
 const SvgCaptcha = require('svg-captcha')
 class UtilController extends Controller{
+    //获取图片验证码
     async captcha(){
         const captcha = SvgCaptcha.create({
             size: 4,

@@ -5,7 +5,7 @@ import {MessageBox} from 'element-ui'
 let service = axios.create({
     timeout:5000,
     //前缀
-    baseUrl:'/api'
+    baseURL:'/api'
 })
 //拦截器设置
 export default ({store,redirect})=>{
