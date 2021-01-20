@@ -4,6 +4,7 @@ module.exports = (option, app) => {
         try {
             await next()
         } catch(err) {
+            console.log('错误收集-------------------------------------')
             //所有的异常都在app上触发一个error事件，框架会记录一条错误日志
             app.emit('error',err,this)
             const status = err.status || 500

@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <el-form class="login-form" label-width="100px" :model="form">
+    <el-form class="login-form" label-width="100px" :model="form" :rules="rules" ref="loginForm">
       <el-form-item prop="email" label="邮箱">
         <el-input v-model="form.email" placeholder="请输入邮箱"></el-input>
       </el-form-item>
@@ -27,22 +27,35 @@
         ></el-input>
       </el-form-item>
       <el-form-item label=" ">
-        <el-button type="primary">登录</el-button>
+        <el-button type="primary" @click.native.prevent="login">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+import md5 from 'md5'
 export default {
   layout: "login",
   data() {
     return {
       form: {
-        email: "",
+        email: "2084857599@qq.com",
         captcha: "",
         emailcode: "",
-        passwd: ""
+        passwd: "z123456"
+      },
+      rules: {
+        email:[
+          {required: true, message: "请输入邮箱"},
+          {type: 'email', message: "请输入正确的邮箱格式"}
+        ],
+        captcha:[
+          {required: true, message: "请输入验证码"}
+        ],
+        passwd:[
+          {required: true, pattern:/^[\w_-]{6,12}$/g, message:"请输入密码"}
+        ]
       },
       code:{
         captcha:'/api/captcha'
@@ -52,6 +65,25 @@ export default {
   methods:{
     resetCaptcha(){
       this.code.captcha = '/api/captcha?_t'+new Date().getTime()
+    },
+    login(){
+      this.$refs.loginForm.validate(async valid => {
+        if(valid){
+          let reqInfo = {
+            email: this.form.email,
+            captcha: this.form.captcha,
+            passwd: md5(this.form.passwd)
+          }
+          let ret = await this.$http.post('/user/login', reqInfo)
+          if(ret.code == 0){
+              this.$router.push("/")
+          }else{
+            this.$message.error(ret.message)
+          }
+        }else{
+          console.log("校验失败")
+        }
+      })
     }
   }
 };

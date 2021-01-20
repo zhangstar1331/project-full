@@ -5,7 +5,8 @@
  */
 module.exports = app => {
   const { router, controller } = app;
-  router.get('/', controller.home.index);
+  const jwt = app.middleware.jwt({ app })
+  router.post('/init', jwt, controller.home.index);
   //验证码
   router.get('/captcha', controller.utils.captcha);
 

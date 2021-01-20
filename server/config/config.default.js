@@ -15,6 +15,35 @@ module.exports = appInfo => {
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1610770035715_2863';
 
+  //接口规范
+  config.swaggerdoc = {
+    dirScanner: './app/controller',
+    apiInfo: {
+      title: 'XX项目接口',
+      description: 'XX项目接口 swagger-ui for egg',
+      version: '1.0.0'
+    },
+    schemes: ['http','https'],
+    consumes: ['application/json'],
+    produces: ['application/json'],
+    enableSecurity: false,
+    routerMap: true,
+    enable: true
+  }
+
+  //mongoDB数据库连接
+  config.mongoose = {
+    url: 'mongodb://127.0.0.1:27017/project-full',
+    options: {}
+  }
+
+  //token秘钥配置
+  config.jwt = {
+    secret: 'DFS$-S34A-@ASD',
+    enable: true,
+    // match: /^\/api/
+  }
+
   // add your middleware config here
   config.middleware = [];
 
