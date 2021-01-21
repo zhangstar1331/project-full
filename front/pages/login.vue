@@ -12,7 +12,7 @@
       </el-form-item>
       <el-form-item prop="emailcode" label="验证码" class="captcha-container">
         <div class="captcha">
-          <el-button type="primary">发送邮件</el-button>
+          <el-button type="primary" :disabled="send.timer>0" @click="sendEmailCode">{{sendText}}</el-button>
         </div>
         <el-input
           v-model="form.emailcode"
@@ -53,18 +53,42 @@ export default {
         captcha:[
           {required: true, message: "请输入验证码"}
         ],
+        emailcode:[
+          {required: true, message: "请输入邮箱验证码"}
+        ],
         passwd:[
           {required: true, pattern:/^[\w_-]{6,12}$/g, message:"请输入密码"}
         ]
       },
       code:{
         captcha:'/api/captcha'
+      },
+      send:{
+        timer:0
       }
+    }
+  },
+  computed:{
+    sendText(){
+      if(this.send.timer<=0){
+        return '发送'
+      }
+      return `${this.send.timer}秒后发送`
     }
   },
   methods:{
     resetCaptcha(){
       this.code.captcha = '/api/captcha?_t'+new Date().getTime()
+    },
+    async sendEmailCode(){
+      this.send.timer = 60
+      await this.$http.get('/sendCode?email='+this.form.email)
+      let timer = setInterval(() => {
+        this.send.timer -= 1
+        if(this.send.timer == 0){
+          clearInterval(timer)
+        }
+      }, 1000);
     },
     login(){
       this.$refs.loginForm.validate(async valid => {
@@ -72,6 +96,7 @@ export default {
           let reqInfo = {
             email: this.form.email,
             captcha: this.form.captcha,
+            emailcode: this.form.emailcode,
             passwd: md5(this.form.passwd)
           }
           let ret = await this.$http.post('/user/login', reqInfo)

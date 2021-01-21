@@ -30,7 +30,7 @@ export default ({store,redirect})=>{
             let {data,config} = response
             //token存储与过期判断
             if(data.code === 0){
-                if(config.url === '/api/user/login'){
+                if(config.url === '/user/login'){
                     localStorage.setItem(TOKEN_KEY,data.data.token)
                 }
             }else if(data.code === -666){

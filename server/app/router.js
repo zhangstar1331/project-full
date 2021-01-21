@@ -9,7 +9,8 @@ module.exports = app => {
   router.post('/init', jwt, controller.home.index);
   //验证码
   router.get('/captcha', controller.utils.captcha);
-
+  //邮箱验证码
+  router.get('/sendCode', controller.utils.sendCode);
   //用户相关
   router.group({name:'user',prefix:'/user'},router => {
     const {register, login, verify} = controller.user

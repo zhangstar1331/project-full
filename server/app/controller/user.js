@@ -45,10 +45,14 @@ class UserController extends Controller {
     //登录
     async login(){
         const {ctx,app} = this
-        const {email, captcha, passwd} = ctx.request.body
+        const {email, captcha, emailcode ,passwd} = ctx.request.body
         //验证码校验
         if(captcha.toUpperCase()!==ctx.session.captcha.toUpperCase()){
-            ctx.helper.error({ctx,message:"验证码错误"})
+            return ctx.helper.error({ctx,message:"验证码错误"})
+        }
+        //邮箱验证码校验
+        if(emailcode!==ctx.session.emailcode){
+            return ctx.helper.error({ctx,message:"邮箱验证码错误"})
         }
         //邮箱密码校验
         let user = await this.ctx.model.User.findOne({
@@ -56,7 +60,7 @@ class UserController extends Controller {
             passwd: md5(passwd + HashSalt)
         })
         if(!user){
-            return ctx.helper.error({ctx,message:"验证码邮箱错误"})
+            return ctx.helper.error({ctx,message:"邮箱/密码错误"})
         }
         //用户的信息加密成token返回
         const token = jwt.sign({
