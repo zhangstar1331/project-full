@@ -7,6 +7,12 @@ module.exports = app => {
   const { router, controller } = app;
   const jwt = app.middleware.jwt({ app })
   router.post('/init', jwt, controller.home.index);
+  //文件上传
+  router.post('/uploadFile', controller.utils.uploadFile);
+  //切片整合
+  router.post('/mergeFile', controller.utils.mergeFile);
+  //判断切片是否已存在
+  router.post('/checkFile', controller.utils.checkFile);
   //验证码
   router.get('/captcha', controller.utils.captcha);
   //邮箱验证码

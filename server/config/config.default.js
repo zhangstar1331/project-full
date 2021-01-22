@@ -1,7 +1,7 @@
 /* eslint valid-jsdoc: "off" */
 
 'use strict';
-
+const path = require('path')
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
@@ -14,6 +14,15 @@ module.exports = appInfo => {
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1610770035715_2863';
+
+  //获取formData数据
+  config.multipart = {
+    mode: 'file',
+    whitelist: () => true
+  }
+
+  //文件存储目录
+  config.UPLOAD_DIR = path.resolve(__dirname,'..','app/public')
 
   //接口规范
   config.swaggerdoc = {
