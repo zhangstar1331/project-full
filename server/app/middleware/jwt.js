@@ -17,6 +17,7 @@ module.exports = ({app}) => {
             ctx.state.userid = ret._id
             await next()
         }catch(err){
+            console.log(err)
             if(err.name === 'TokenExpiredError'){
                 ctx.body = {
                     code: -666,

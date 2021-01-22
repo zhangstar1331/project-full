@@ -18,10 +18,15 @@ module.exports = app => {
   //邮箱验证码
   router.get('/sendCode', controller.utils.sendCode);
   //用户相关
-  router.group({name:'user',prefix:'/user'},router => {
-    const {register, login, verify} = controller.user
+  router.group({ name: 'user', prefix: '/user' }, router => {
+    const { register, login, verify } = controller.user
     router.post('/register', register)
     router.post('/login', login)
     router.post('/verify', verify)
+  })
+  //文章相关
+  router.group({ name: 'article', prefix: '/article' }, router => {
+    const { create } = controller.article
+    router.post('/create', jwt, create)
   })
 };
