@@ -1,10 +1,24 @@
 module.exports = app => {
     const mongoose = app.mongoose
-    const UserSchema = new mongoose.Schema({
+    const Schema = mongoose.Schema
+    const UserSchema = new Schema({
         email: {type: String, required: true},
         passwd: {type: String, required: true, select: false},
         nickname: {type: String, required: true},
-        avatar: {type: String, required: false, default: '/user.png'}
-    })
+        avatar: {type: String, required: false, default: '/user.png'},
+        //关注列表
+        following: {
+            type: [{type: Schema.Types.ObjectId, ref:'User'}],
+            default: []
+        },
+        likeArticle: {
+            type: [{type: Schema.Types.ObjectId, ref:'Article'}],
+            default: []
+        },
+        disLikeArticle: {
+            type: [{type: Schema.Types.ObjectId, ref:'Article'}],
+            default: []
+        },
+    },{timestamps: true})
     return mongoose.model('User',UserSchema)
 }

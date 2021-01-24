@@ -5,6 +5,32 @@ const marked = require('marked')
  */
 class ArticleController extends Controller {
     /**
+     * @summary 查询文章
+     * @description 查询文章
+     * @router get /article
+     * @request body
+     * @response 200
+     */
+    async index(){
+        const {ctx} = this
+        const ret = await ctx.model.Article.find()
+        ctx.helper.success({ctx,res:ret})
+    }
+    /**
+     * @summary 查询文章详情
+     * @description 查询文章详情
+     * @router get /article/id
+     * @request body
+     * @response 200
+     */
+    async detail(){
+        const {ctx} = this
+        const {id} = ctx.params
+        //访问量统计
+        const ret = await ctx.model.Article.findOneAndUpdate({_id: id},{$inc:{views:1}}).populate('author')
+        ctx.helper.success({ctx,res:ret})
+    }
+    /**
      * @summary 添加文章
      * @description 添加文章
      * @router post /article/create

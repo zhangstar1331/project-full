@@ -9,7 +9,7 @@ module.exports = ({app}) => {
             }
             return
         }
-        const token = ctx.request.header.authorization.replace('Brarer','')
+        const token = ctx.request.header.authorization.replace('Bearer ','')
         try{
             //解析token
             const ret = await jwt.verify(token, app.config.jwt.secret)

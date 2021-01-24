@@ -19,14 +19,25 @@ module.exports = app => {
   router.get('/sendCode', controller.utils.sendCode);
   //用户相关
   router.group({ name: 'user', prefix: '/user' }, router => {
-    const { register, login, verify } = controller.user
+    const { register, login, verify, detail, isfollow, follow, cancelFollow, likeArticle, cancelLikeArticle, articleStatus } = controller.user
     router.post('/register', register)
     router.post('/login', login)
     router.post('/verify', verify)
+    router.get('/detail', jwt, detail)
+    //文章关注
+    router.get('/follow/:id', jwt, isfollow)
+    router.put('/follow/:id', jwt, follow)
+    router.delete('/follow/:id', jwt, cancelFollow)
+    //文章点赞
+    router.put('/likeArticle/:id', jwt, likeArticle)
+    router.delete('/likeArticle/:id', jwt, cancelLikeArticle)
+    router.get('/article/:id', jwt, articleStatus)
   })
   //文章相关
   router.group({ name: 'article', prefix: '/article' }, router => {
-    const { create } = controller.article
+    const { create, index, detail } = controller.article
+    router.get('/', index)
+    router.get('/:id', detail)
     router.post('/create', jwt, create)
   })
 };
